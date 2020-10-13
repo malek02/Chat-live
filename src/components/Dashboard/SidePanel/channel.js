@@ -13,9 +13,10 @@ const Channel = () => {
     const dispatch = useDispatch()
     useEffect(() => {
         addListenners()
-        return ()=>{
+        return () => {
 
-            removeListeners() }
+            removeListeners()
+        }
     }, [])
 
 
@@ -35,28 +36,28 @@ const Channel = () => {
     }
     useEffect(
         () => {
-          
+
             firstChannel()
-          
+
         },
         [allchannels]
-      );
+    );
     const addListenners = () => {
         let loadchannels = []
         uref.on('child_added', data => {
             loadchannels.push(data.val()); setTextchanel({ channelName: '', channelDetails: '' });
 
             setAllchannels(loadchannels);
-           
+
         })
     }
 
     const firstChannel = () => {
-        const firstOne =allchannels[0] 
+        const firstOne = allchannels[0]
         console.log(8, allchannels)
         console.log(7, firstOne)
-        if (allchannels.length>0) {
-            
+        if (allchannels.length > 0) {
+
             dispatch(setCurrentchannel(firstOne))
 
         }
@@ -76,7 +77,7 @@ const Channel = () => {
     const { channelName, channelDetails } = textchanel
     const removeListeners = () => {
         uref.off();
-      };
+    };
     const handelSubmit = (e) => {
         e.preventDefault()
 

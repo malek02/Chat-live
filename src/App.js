@@ -9,8 +9,9 @@ import firebase from './components/firebase';
 import Spinner from './components/spinner'
 import { loadUser } from './components/actions/action-authencation';
 import Dashboard from './components/Dashboard/Dashboard';
-import { Logout} from './components/actions/action-authencation'
-const App = (props) => {
+import { Logout} from './components/actions/action-authencation';
+import PrivateRouter from './Router/PrivateRouter'
+const App = ({history}) => {
   const dispatch = useDispatch();
   const loding = useSelector((state) => state.auThentication.loding);
   
@@ -18,12 +19,12 @@ const App = (props) => {
     firebase.auth().onAuthStateChanged(user => {
       console.log(115,user);
       if(user){
-        dispatch(loadUser(user))
-        props.history.push("/Dashboard")
+        dispatch(loadUser(user,history))
+        
       }
       else{
-        props.history.push("/login")
-        dispatch(Logout())
+        
+        dispatch(Logout(history))
       }
     })
 
@@ -35,7 +36,7 @@ const App = (props) => {
 { loding ? <Spinner /> :
       <Switch>
         <Route exact path='/' component={loading} />
-        <Route exact path='/Dashboard' component={Dashboard} />
+        <PrivateRouter exact path='/Dashboard' component={Dashboard} />
         <Route exact path='/login' component={Login} />
         <Route exact path='/register' component={Register} />
       </Switch>}

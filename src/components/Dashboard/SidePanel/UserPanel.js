@@ -2,14 +2,16 @@
 import React from 'react';
 import { Dropdown, Grid, Header, Icon,Image } from 'semantic-ui-react'
 import firebase from '../../firebase'
-import {useSelector } from 'react-redux'
+import {useSelector,useDispatch } from 'react-redux';
+import {Redirect} from "react-router-dom"
+import {Logout} from '../../actions/action-authencation'
+import {withRouter} from 'react-router-dom'
 
-
-
-const UserPanel = () => {
+const UserPanel = ({history}) => {
 
     const user = useSelector((state) => state.auThentication.Authenticated);
-    console.log(66666,user.displayName)
+    
+    const dispatch=useDispatch();
     const drowpDownOption=()=>[
         {
             key:"user",
@@ -29,7 +31,8 @@ const UserPanel = () => {
     ]
      function SingOut(){
         firebase.auth().signOut()
-        .then(()=>console.log("Sign out succuses"))
+        .then(()=>{dispatch(Logout(history));console.log(45454545454,"hello logout")} )
+
     }
     return (
         <Grid style={{ background: '#4c3c4c' }} >
@@ -42,7 +45,7 @@ const UserPanel = () => {
                     </Header>
                 </Grid.Row>
 <Header style={{padding:'0.25em'}} as='h4' inverted >
-    <Dropdown text={<span><Image src={user.photoURL} spaced='right' avatar /> {user.displayName}</span>} options={drowpDownOption()} />
+    <Dropdown text={user ?<span><Image src={user.photoURL} spaced='right' avatar /> {user.displayName}</span> : ''} options={drowpDownOption()} />
     
       
     
@@ -52,4 +55,4 @@ const UserPanel = () => {
     );
 }
 
-export default UserPanel;
+export default withRouter(UserPanel);

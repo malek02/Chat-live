@@ -1,7 +1,7 @@
 
 
 
-export const loadUser =(user)=> dispatch =>{
+export const loadUser =(user,history)=> dispatch =>{
   
 
   
@@ -10,17 +10,17 @@ export const loadUser =(user)=> dispatch =>{
         payload:user
     })
     
-
+    history.push("/Dashboard")
 }
 
 
-export  const Logout = () =>dispatch=>{
+export  const Logout = (history) =>dispatch=>{
 
 
     dispatch({
         type: 'LOGOUT_NAVBAR',
-        
+       
     })
-
+    history.push("/login")
   }
 
