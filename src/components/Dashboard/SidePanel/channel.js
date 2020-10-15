@@ -72,7 +72,7 @@ const Channel = () => {
     const handelChange = (e) => {
         const { value, name } = e.target
         setTextchanel({ ...textchanel, [name]: value })
-        console.log(1111111, textchanel)
+        
     }
     const { channelName, channelDetails } = textchanel
     const removeListeners = () => {

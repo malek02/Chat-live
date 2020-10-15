@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux';
 import firebase from '../../firebase';
 import FileModal from './fileModal';
 import { v4 as uuidv4 } from 'uuid';
-import { useCallback } from 'react';
 
+import ProgressBar from './proggressBar'
 const MessegesForm = ({ messagesRef }) => {
 
     const currentCannel = useSelector((state) => state.CurrentChannel.currentCannel);
@@ -67,7 +67,8 @@ const MessegesForm = ({ messagesRef }) => {
    ()=>{uploadTask.snapshot.ref.getDownloadURL().then(data=>{
     
     sendMesseges(data)
-    setProgres(0)
+    setProgres(0);
+    setUploadTask(null)
 })})
 
         }
@@ -103,6 +104,7 @@ setUploadTask((storegeref.child(filePath).put(file,medatata)))
                     labelPosition="right" icon="cloud upload" onClick={e=>openmodal(e)} />
             </Button.Group>
             <FileModal uploadFile={e=>uploadFile(e)} modal={modal} closeModal={e=>Closemodal(e)} />
+            <ProgressBar  Task={uploadTask} progress={progres} />
         </Segment>
 
 
