@@ -1,14 +1,15 @@
 
 import React, { useState } from 'react'
 import {Modal , Button, Form, Icon,Input} from 'semantic-ui-react'
-import mime from 'mime'
+import mime from 'mime-types';
 
-const FileModal=({modal,closeModal})=>{
+const FileModal=({modal,closeModal,uploadFile})=>{
 const [file,setFile]=useState(null);
-const [authorized,setAuthorized]=useState(["image/jpg","image/png"])
+const [authorized,setAuthorized]=useState(["image/jpeg","image/png","image/jpg"])
 console.log(6,modal)
 const isAuthorize=(x)=>{
     authorized.includes(mime.lookup(x))
+    console.log(9,authorized.includes(mime.lookup(x)))
 }
    
     const addFile=(e)=>{
@@ -18,14 +19,13 @@ const isAuthorize=(x)=>{
     const sendFile=()=>{
        
         if(file !==null){
-      if(isAuthorize(file.name)){
+      if(isAuthorize(file.name)!==false){
           const medatata ={contetntType:mime.lookup(file.name)};
-          uploadFile()
+          console.log(1,medatata)
+          uploadFile(file,medatata)
       }
     }
-const  uploadFile=(file,medatata)=>{
-
-}
+    }
 return(
 <Modal basic open={modal} onClose={e=>closeModal(e)} >
                 <Modal.Header>Select an Image File</Modal.Header>
@@ -42,7 +42,7 @@ return(
                     </Form>
                 </Modal.Content>
                 <Modal.Actions>
-                <Button color="green" inverted onClick={sendFile()} >
+                <Button color="green" inverted onClick={e=>sendFile(e)} >
                         <Icon name="checkmark" />send
         </Button>
      

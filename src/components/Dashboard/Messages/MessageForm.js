@@ -1,21 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Input, Segment } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import firebase from '../../firebase';
 import FileModal from './fileModal';
+import { v4 as uuidv4 } from 'uuid';
+import { useCallback } from 'react';
+
 const MessegesForm = ({ messagesRef }) => {
 
     const currentCannel = useSelector((state) => state.CurrentChannel.currentCannel);
 
     const user = useSelector((state) => state.auThentication.Authenticated);
+    const [yourmessage,setYourmessage]=useState()
     const [modal, setModal] = useState(false)
-    const [message, setMessage] = useState()
+    const [message, setMessage] = useState();
+    const [progres, setProgres] = useState();
+    const [uploadSt,setUploadSt]=useState();
+    const [uploadTask,setUploadTask]=useState(null);
+    const [storegeref,setStoregeref]=useState(firebase.storage().ref())
+
     const handelChange = (e) => { setMessage(e.target.value) }
 
-    const sendMesseges = () => {
-        const newMessage = {
+    const sendMesseges = (fileUrl=null) => {
+       
+            const newMessage = {
             timestamp: firebase.database.ServerValue.TIMESTAMP,
-            content: message,
+           
 
             User: {
                 id: user.uid,
@@ -23,13 +33,20 @@ const MessegesForm = ({ messagesRef }) => {
                 avatar: user.photoURL
             }
         }
-        if (message) {
+        console.log(5555555555,fileUrl)
+        if(fileUrl !==null){
+            newMessage['image']=fileUrl
+
+        }else{
+            newMessage['content']=message
+        }
+        setYourmessage(newMessage)
             messagesRef
                 .child(currentCannel.id)
                 .push()
                 .set(newMessage)
                 .then(() => { console.log(11, "messge send succed"); setMessage("") })
-        }
+        
     }
     const openmodal = () => {
         setModal(true)
@@ -37,7 +54,37 @@ const MessegesForm = ({ messagesRef }) => {
     const Closemodal = () => {
         setModal(false)
     }
+    useEffect(()=>{
+        
+    console.log(42,uploadTask)
+        if(uploadTask){
+            uploadTask.on('state_changed', 
+  data=> {
+    
+    const progress = Math.round((data.bytesTransferred / data.totalBytes)) * 100;
+   setProgres(progress)},
+   err=>{console.error(err)},
+   ()=>{uploadTask.snapshot.ref.getDownloadURL().then(data=>{
+    console.log(data)
+    messagesRef.child(currentCannel.id)
+                .push()
+                .set(sendMesseges(data))
+    setProgres(0)
+})})
 
+        }
+        }
+        
+    ,[uploadTask])
+    const  uploadFile=(file,medatata)=>{
+const pathToupload= currentCannel.id
+const ref=messagesRef
+const filePath=`chat/public/${uuidv4()}.jpg`
+setUploadTask((storegeref.child(filePath).put(file,medatata)))
+
+
+    }
+   
     return (
         <Segment className="message__form">
             <Input
@@ -57,7 +104,7 @@ const MessegesForm = ({ messagesRef }) => {
                 <Button color="teal" content="upload Media"
                     labelPosition="right" icon="cloud upload" onClick={e=>openmodal(e)} />
             </Button.Group>
-            <FileModal modal={modal} closeModal={e=>Closemodal(e)} />
+            <FileModal uploadFile={e=>uploadFile(e)} modal={modal} closeModal={e=>Closemodal(e)} />
         </Segment>
 
 

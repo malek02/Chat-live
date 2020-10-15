@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 
 const CallMessage=({messages})=>{
-    const  currentMessege = useSelector((state) => state.CurrentChannel.currentMessege);
+    
     console.log(11111111,messages)
     
     return(
