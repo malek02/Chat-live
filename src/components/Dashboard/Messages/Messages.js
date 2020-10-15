@@ -10,6 +10,7 @@ const Messages = () => {
  
   const dispatch = useDispatch()
   const currentCannel = useSelector((state) => state.CurrentChannel.currentCannel);
+  const auThentication = useSelector((state) => state.auThentication.Authenticated);
   const [loding, setLoding] = useState(false)
   const [allchannels, setAllchannels] = useState([])
   useEffect(() => {
@@ -23,7 +24,7 @@ const Messages = () => {
         loadchannels.push(data.val());
         
         setAllchannels(loadchannels);setLoding(true)
-       console.log(11,allchannels)
+       
       })
     }
   }
@@ -34,7 +35,7 @@ const Messages = () => {
 
  const displayMessage=x=>{
 return(
-  x  &&  x.map(message => <CallMessage messages={message}  />))
+  x  &&  x.map(message => <CallMessage  user={auThentication} messages={message}  />))
 }
 
 

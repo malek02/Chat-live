@@ -4,3 +4,10 @@
   padding: 1em;
   margin-top: 21rem;
 }
+.message__image{
+  padding: 1em;
+}
+.selef_message{
+  border-left: 3px solid rgb(237, 182, 100);
+  padding-left: 5px;
+}

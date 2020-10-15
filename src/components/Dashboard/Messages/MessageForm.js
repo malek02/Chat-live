@@ -11,7 +11,7 @@ const MessegesForm = ({ messagesRef }) => {
     const currentCannel = useSelector((state) => state.CurrentChannel.currentCannel);
 
     const user = useSelector((state) => state.auThentication.Authenticated);
-    const [yourmessage,setYourmessage]=useState()
+
     const [modal, setModal] = useState(false)
     const [message, setMessage] = useState();
     const [progres, setProgres] = useState();
@@ -33,14 +33,14 @@ const MessegesForm = ({ messagesRef }) => {
                 avatar: user.photoURL
             }
         }
-        console.log(5555555555,fileUrl)
+        
         if(fileUrl !==null){
             newMessage['image']=fileUrl
 
         }else{
             newMessage['content']=message
         }
-        setYourmessage(newMessage)
+      
             messagesRef
                 .child(currentCannel.id)
                 .push()
@@ -56,7 +56,7 @@ const MessegesForm = ({ messagesRef }) => {
     }
     useEffect(()=>{
         
-    console.log(42,uploadTask)
+    
         if(uploadTask){
             uploadTask.on('state_changed', 
   data=> {
@@ -65,10 +65,8 @@ const MessegesForm = ({ messagesRef }) => {
    setProgres(progress)},
    err=>{console.error(err)},
    ()=>{uploadTask.snapshot.ref.getDownloadURL().then(data=>{
-    console.log(data)
-    messagesRef.child(currentCannel.id)
-                .push()
-                .set(sendMesseges(data))
+    
+    sendMesseges(data)
     setProgres(0)
 })})
 

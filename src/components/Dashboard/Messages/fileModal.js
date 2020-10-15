@@ -16,13 +16,14 @@ const isAuthorize=(x)=>{
         const file=e.target.files[0]
     if(file){setFile(file)}
     }
-    const sendFile=()=>{
+    const sendFile=(e)=>{
        
         if(file !==null){
       if(isAuthorize(file.name)!==false){
           const medatata ={contetntType:mime.lookup(file.name)};
-          console.log(1,medatata)
-          uploadFile(file,medatata)
+          
+          uploadFile(file,medatata) 
+          closeModal(e)
       }
     }
     }
